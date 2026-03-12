@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 abstract class Room {
     String type;
     int beds;
@@ -34,26 +36,55 @@ class SuiteRoom extends Room {
     }
 }
 
+class RoomInventory {
+    private HashMap<String, Integer> inventory;
+
+    public RoomInventory() {
+        inventory = new HashMap<>();
+    }
+
+    public void addRoomType(String roomType, int count) {
+        inventory.put(roomType, count);
+    }
+
+    public int getAvailability(String roomType) {
+        return inventory.getOrDefault(roomType, 0);
+    }
+
+    public void updateAvailability(String roomType, int newCount) {
+        inventory.put(roomType, newCount);
+    }
+
+    public void displayInventory() {
+        System.out.println("Current Room Availability:");
+        for (String type : inventory.keySet()) {
+            System.out.println(type + " -> " + inventory.get(type) + " rooms available");
+        }
+        System.out.println();
+    }
+}
+
 public class BookMyStayApp {
     public static void main(String[] args) {
         SingleRoom single = new SingleRoom();
         DoubleRoom doubleR = new DoubleRoom();
         SuiteRoom suite = new SuiteRoom();
 
-        int singleAvailable = 5;
-        int doubleAvailable = 3;
-        int suiteAvailable = 2;
+        RoomInventory inventory = new RoomInventory();
+        inventory.addRoomType(single.type, 5);
+        inventory.addRoomType(doubleR.type, 3);
+        inventory.addRoomType(suite.type, 2);
 
-        System.out.println("Book My Stay - Hotel Booking System v2.1");
+        System.out.println("Book My Stay - Hotel Booking System v3.1");
         System.out.println("========================================\n");
 
         single.displayDetails();
-        System.out.println("Available: " + singleAvailable + "\n");
-
+        System.out.println();
         doubleR.displayDetails();
-        System.out.println("Available: " + doubleAvailable + "\n");
-
+        System.out.println();
         suite.displayDetails();
-        System.out.println("Available: " + suiteAvailable + "\n");
+        System.out.println();
+
+        inventory.displayInventory();
     }
 }
